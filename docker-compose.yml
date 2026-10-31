@@ -1,0 +1,49 @@
+# docker compose up --build
+#   1. exporter  downloads a public BERT sentiment model and writes a SavedModel (first run only)
+#   2. tfserving loads it and serves REST on :8501
+#   3. api       Flask + gunicorn on :8000, talks to tfserving over the compose network
+services:
+  exporter:
+    build: ./export
+    environment:
+      HF_MODEL_ID: ${HF_MODEL_ID:-nlptown/bert-base-multilingual-uncased-sentiment}
+      MODEL_NAME: ${MODEL_NAME:-text_classifier}
+    volumes:
+      - models:/models
+    restart: "no"
+
+  tfserving:
+    image: tensorflow/serving:2.15.1
+    # The official image is amd64 only; on Apple Silicon it runs under emulation.
+    platform: linux/amd64
+    environment:
+      MODEL_NAME: ${MODEL_NAME:-text_classifier}
+    volumes:
+      - models:/models
+    ports:
+      - "8501:8501"
+    depends_on:
+      exporter:
+        condition: service_completed_successfully
+
+  api:
+    build:
+      context: .
+      args:
+        HF_TOKENIZER_ID: ${HF_MODEL_ID:-nlptown/bert-base-multilingual-uncased-sentiment}
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      TF_SERVING_URL: http://tfserving:8501
+      MODEL_NAME: ${MODEL_NAME:-text_classifier}
+      LABELS_PATH: /models/${MODEL_NAME:-text_classifier}/labels.json
+    volumes:
+      - models:/models:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      - tfserving
+
+volumes:
+  models:

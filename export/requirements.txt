@@ -1,0 +1,5 @@
+# Export-only dependencies. Not needed by the API image.
+# transformers 4.x is the last line with TensorFlow model classes; TF 2.15 still ships Keras 2.
+tensorflow==2.15.1
+transformers==4.44.2
+huggingface_hub==0.24.6

@@ -1,0 +1,11 @@
+[project]
+name = "bert-tfserving-api"
+version = "2026.1.0"
+description = "Flask API in front of TensorFlow Serving for a BERT text classifier (2021 pattern, revisited)"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = [".", "tests"]

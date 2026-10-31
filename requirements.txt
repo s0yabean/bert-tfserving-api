@@ -1,0 +1,5 @@
+flask==3.0.3
+gunicorn==23.0.0
+requests==2.32.3
+tokenizers==0.20.0
+huggingface_hub==0.24.6
