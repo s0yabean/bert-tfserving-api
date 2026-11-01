@@ -1,5 +1,7 @@
 # bert-tfserving-api
 
+[![CI](https://github.com/s0yabean/bert-tfserving-api/actions/workflows/ci.yml/badge.svg)](https://github.com/s0yabean/bert-tfserving-api/actions/workflows/ci.yml)
+
 A Flask API in front of TensorFlow Serving for a BERT text classifier: a model serving pattern from 2021, revisited in 2026.
 
 I built the first version in 2021 while CTO of Mindreader, to put a fine-tuned BERT classifier behind an HTTP endpoint. This repo keeps that architecture (a thin Python API that tokenizes, and TF-Serving that runs the model) and fixes what a 2026 code review found wrong with it. The original model and training data are not public, so the repo exports a public BERT sentiment model from Hugging Face instead, and `docker compose up` gives a working stack.
