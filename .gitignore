@@ -7,3 +7,4 @@ models/
 *.pickle
 *.pkl
 .DS_Store
+.ruff_cache/
